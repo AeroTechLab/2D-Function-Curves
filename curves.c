@@ -61,7 +61,7 @@ Curve Curve_Create( void )
   return newCurve;
 }
 
-void Curve_Unload( Curve curve )
+void Curve_Discard( Curve curve )
 {
   //DEBUG_PRINT( "unloading curve %p data", curve );
   
