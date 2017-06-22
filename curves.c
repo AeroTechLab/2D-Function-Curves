@@ -23,12 +23,11 @@
 #include "curves.h"
 
 #include <math.h>
+#include <stdlib.h>
 #include <string.h>
 
 //#include "debug/sync_debug.h"
 
-
-const size_t SPLINE3_COEFFS_NUMBER = 4;
 
 typedef struct _SegmentData
 {
@@ -50,7 +49,7 @@ struct _CurveData
 };
 
 
-Curve Curve_Create( DataHandle curveData )
+Curve Curve_Create( void )
 {
   Curve newCurve = (Curve) malloc( sizeof(CurveData) );
   
@@ -104,9 +103,9 @@ void Curve_AddSpline3Segment( Curve curve, double* splineValues, double splineBo
 
 void Curve_AddPolySegment( Curve curve, double* polyCoeffs, size_t coeffsNumber, double polyBounds[ 2 ] )
 {
-  if( curve == NULL ) return NULL;
+  if( curve == NULL ) return;
   
-  if( coeffsNumber == 0 ) return NULL;
+  if( coeffsNumber == 0 ) return;
   
   curve->segmentsList = (Segment) realloc( curve->segmentsList, ( curve->segmentsNumber + 1 ) * sizeof(SegmentData) );
   
