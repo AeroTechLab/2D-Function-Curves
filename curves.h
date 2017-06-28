@@ -32,10 +32,10 @@
 
 #include <stddef.h>
 
+#define SPLINE3_COEFFS_NUMBER 4 
+
 typedef struct _CurveData CurveData;      ///< Single curve internal data structure    
 typedef CurveData* Curve;                 ///< Opaque reference to curve internal data structure
-
-const size_t SPLINE3_COEFFS_NUMBER = 4;
 
                                                                         
 /// @brief Creates curve data structure and loads segments data                                              
