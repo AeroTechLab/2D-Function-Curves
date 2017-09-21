@@ -54,6 +54,7 @@ Curve Curve_Create( void )
   Curve newCurve = (Curve) malloc( sizeof(CurveData) );
   
   newCurve->scaleFactor = 1.0;
+  newCurve->offset = 0.0;
   newCurve->maxAbsoluteValue = -1.0;
   newCurve->segmentsList = NULL;
   newCurve->segmentsNumber = 0;
@@ -117,6 +118,8 @@ void Curve_AddPolySegment( Curve curve, double* polyCoeffs, size_t coeffsNumber,
   newSegment->bounds[ 0 ] = polyBounds[ 0 ];
   newSegment->bounds[ 1 ] = polyBounds[ 1 ];
   
+  newSegment->offset = 0.0;
+  
   memcpy( newSegment->coeffs, polyCoeffs, coeffsNumber * sizeof(double) );
 }
 
@@ -161,10 +164,7 @@ double Curve_GetValue( Curve curve, double valuePosition, double defaultValue )
           curveValue = 0.0;
           double relativePosition = valuePosition - positionOffset;
           for( size_t coeffIndex = 0; coeffIndex < coeffsNumber; coeffIndex++ )
-          {
-            if( relativePosition != 0.0 )
-              curveValue += curveCoeffs[ coeffIndex ] * pow( relativePosition, (double) coeffIndex );
-          }
+            curveValue += curveCoeffs[ coeffIndex ] * pow( relativePosition, (double) coeffIndex );
           
           break;
         }
@@ -172,11 +172,11 @@ double Curve_GetValue( Curve curve, double valuePosition, double defaultValue )
     }
     
     curveValue = curve->scaleFactor * curveValue + curve->offset;
-    //if( curve->maxAbsoluteValue > 0.0 )
-    //{
-    //  if( curveValue > curve->maxAbsoluteValue ) curveValue = curve->maxAbsoluteValue;
-    //  else if( curveValue < -curve->maxAbsoluteValue ) curveValue = -curve->maxAbsoluteValue;
-    //}
+    if( curve->maxAbsoluteValue > 0.0 )
+    {
+      if( curveValue > curve->maxAbsoluteValue ) curveValue = curve->maxAbsoluteValue;
+      else if( curveValue < -curve->maxAbsoluteValue ) curveValue = -curve->maxAbsoluteValue;
+    }
   }
   
   return curveValue;
